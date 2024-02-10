@@ -1,0 +1,122 @@
+local metatable = getrawmetatable(game)
+setreadonly(metatable,false)
+local mt = getrawmetatable(game)
+setreadonly(mt,false)
+local old = mt.__index
+mt.__index = hookmetamethod(game,"__index",function(self,b)
+    if self:IsA("Part") and b.Name == "Handle🏈" then
+        return Vector3.new(10, 10, 10)
+    end
+    return old(self,b)
+end)
+
+
+local function findClosestPartToVector3(v3)
+    local part, dist = nil, math.huge
+    for _,v in next, workspace:GetDescendants() do
+        if v.Name == 'Handle🏈' then
+            local m = (v3 - v.Position).magnitude
+            if m < dist then
+                dist = m
+                part = v
+            end
+        end
+    end
+    return part, dist
+end
+
+getgenv().MagIsOn = false;
+ 
+game:GetService("Players").LocalPlayer:GetMouse().Button1Down:Connect(function()
+    if getgenv().MagIsOn == true then
+        spawn(function() 
+            local players = game:GetService("Players")
+            local rs = game:GetService("RunService")
+            local plr = game:GetService("Players").LocalPlayer.Character
+            local ball = findClosestPartToVector3(game.Players.LocalPlayer.Character.Head.Position)
+            ball.CanCollide = false
+            local hum = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+            local dis = (hum.position-ball.position).magnitude
+            if (dis <= getgenv().MagsDistance) then
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+                ball.CFrame = CFrame.new(plr.Torso.Position)
+                plr.Box.CFrame = CFrame.new(plr.Torso.Position)
+                wait(.05)
+            end
+        end)        
+    elseif getgenv().MagIsOn == false then
+        return;
+    end
+end)
+
+--Functions
+
+function autocatch()
+    while _G.autocatch == true do
+        game:GetService("ReplicatedStorage").Packages.Knit.Services.FieldService.RE.Hitbox:FireServer("Catch")
+        wait(.0001)
+     end
+    end
+
+
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local Window = OrionLib:MakeWindow({Name = "SwagsHub Preium | V.4.0.0 | Auto 3s", HidePremium = false, IntroText = "SwagsHub Preimuim", SaveConfig = true, ConfigFolder = "Swagshub"})
+    
+
+--Tabs
+local Main = Window:MakeTab({
+	Name = "Main",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+
+--Toggles
+Main:AddToggle({
+	Name = "autocatch",
+	Default = false,
+	Callback = function(Value)
+        _G.autocatch = Value
+        autocatch()
+	end    
+})
+
+Main:AddToggle({
+	Name = "mags",
+	Default = getgenv().MagIsOn,
+	Callback = function(Value)
+        getgenv().MagIsOn = Value
+	end    
+})
+
+ 
+Main:AddSlider({
+    Name = "Mag distance",
+    Default = 30,
+    Min = 10,
+    Max = 100,
+    Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "",
+	Callback = function(Value)
+		getgenv().MagsDistance = Value
+	end
+})
+ 
